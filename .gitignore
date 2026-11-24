@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.organizer_history.json
+organizer_history.json
+build/
+dist/
