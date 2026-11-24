@@ -1,222 +1,33 @@
-# 🚀 Smart File Organizer
+# Smart File Organizer
 
-<div align="center">
-
-![Python Version](https://img.shields.io/badge/Python-3.9%2B-blue?style=for-the-badge&logo=python)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
-![GitHub Stars](https://img.shields.io/github/stars/mahamedwow1-afk/Smart-File-Organizer?style=for-the-badge)
-
-**تطبيق بايثون احترافي لتنظيم الملفات تلقائياً بواجهة مستخدم عصرية**
-
-[🚀 Demo](#-demo) • [📖 Installation](#-installation) • [⚙️ Usage](#-usage) • [🤝 Contributing](#-contributing)
-
-</div>
-
----
-
-## 🎯 Overview
-
-Smart File Organizer هو تطبيق سطح مكتب مبني بلغة Python يستخدم واجهة المستخدم PyQt6 لتنظيم الملفات والصور والفيديوهات والمستندات في مجلدات منظمة تلقائياً بناءً على نوع الملف والتاريخ.
+Small Python tool that sorts the files in one folder into Images, Videos, Audio, Documents, Archives and Other, with undo for the last run.
 
 ![App Interface](screenshot.png)
 
----
+_The screenshot is the desktop window (CustomTkinter) in its empty start state._
 
-## ✨ Features
+## What works (tested)
 
-| Feature | Description |
-|---------|-------------|
-| 📁 **Auto-Organization** | تصنيف تلقائي للملفات حسب النوع (صور، فيديو، مستندات) |
-| 🌙 **Dark Mode** | دعم الوضع الليلي الكامل للواجهة |
-| ↩️ **Undo Support** | إمكانية التراجع عن آخر عملية تنظيم |
-| 📊 **History Tracking** | حفظ سجل جميع العمليات السابقة |
-| ⚡ **Fast Processing** | معالجة سريعة للملفات باستخدام الخيوط المتوازية |
-| 🎨 **Modern UI** | واجهة مستخدم عصرية وسهلة الاستخدام |
+- Scans one folder (not sub-folders) and groups files by extension.
+- Moves files into category folders. Never overwrites: a name clash becomes `name_1.ext`.
+- Preview of how many files go to each folder before anything moves (command line).
+- Undo of the last run, saved in `.organizer_history.json` inside the organized folder.
+- 5 automated tests (`python -m pytest tests`) cover scan, plan, move, undo and name clashes.
 
----
-
-## 📸 Demo
-
-### Main Interface
-![Main Interface](screenshot.png)
-
-### Organization Result
-```
-📁 Downloads/
-├── 📁 Images/
-│   ├── 📷 photo1.jpg
-│   ├── 📷 photo2.png
-│   └── 🖼️ screenshot.webp
-├── 📁 Videos/
-│   ├── 🎬 vacation.mp4
-│   └── 🎬 tutorial.avi
-├── 📁 Documents/
-│   ├── 📄 report.pdf
-│   └── 📄 notes.docx
-└── 📁 Audio/
-    ├── 🎵 song.mp3
-    └── 🎵 podcast.wav
-```
-
----
-
-## 📦 Installation
-
-### Prerequisites
-
-- Python 3.9 or higher
-- pip (Python package manager)
-
-### Quick Install
+## Run
 
 ```bash
-# Clone the repository
-git clone https://github.com/mahamedwow1-afk/Smart-File-Organizer.git
-cd Smart-File-Organizer
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Run the application
-python main.py
+python main.py        # command line: asks for a folder, shows a preview, asks to confirm
+python gui_main.py    # desktop window: Browse, Start Organizing, Undo Cleanup
 ```
 
-### Build Executable (Windows)
+## Limits
 
-```bash
-# Install PyInstaller
-pip install pyinstaller
+- Sorts by file type only, not by date and not by content.
+- The window has a Dark/Light switch. There is no config file, history viewer or keyboard shortcuts.
+- The window has no preview step: Start Organizing moves files right away (Undo reverses it).
+- The command line and the core logic are tested. The window was not run in the test environment (no display).
+- `gui_main.exe` in the repo is an old prebuilt binary that was not rebuilt or verified. Build your own with PyInstaller from `gui_main.py`.
 
-# Build executable
-pyinstaller --onefile --windowed --icon=icon.ico gui_main.py
-
-# The executable will be in dist/gui_main.exe
-```
-
----
-
-## ⚙️ Usage
-
-### Basic Usage
-
-```bash
-# Open the application
-python main.py
-
-# Or run the GUI version
-python gui_main.py
-```
-
-### Configuration
-
-The application reads configuration from `config.json`:
-
-```json
-{
-  "source_dir": "./Downloads",
-  "target_dir": "./Organized",
-  "auto_sort": true,
-  "dark_mode": true,
-  "max_file_size_mb": 500
-}
-```
-
-### Keyboard Shortcuts
-
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+O` | Open folder |
-| `Ctrl+S` | Start organization |
-| `Ctrl+Z` | Undo last action |
-| `Ctrl+H` | Show history |
-| `Ctrl+Q` | Quit application |
-
----
-
-## 🛠️ Tech Stack
-
-### Backend
-- **Python 3.9+**: Core programming language
-- **PyQt6**: GUI framework
-- **Pillow**: Image processing
-- **FFmpeg-python**: Video/audio metadata extraction
-
-### Tools
-- **PyInstaller**: Executable packaging
-- **git**: Version control
-- **pytest**: Testing framework
-
----
-
-## 📁 Project Structure
-
-```
-Smart-File-Organizer/
-├── main.py                  # Entry point
-├── gui_main.py              # GUI application
-├── gui_main.spec            # PyInstaller specification
-├── icon.ico                 # Application icon
-├── config.json              # Configuration file
-├── organizer_history.json   # History database
-├── README.md                # This file
-└── requirements.txt         # Python dependencies
-```
-
----
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=src --cov-report=html
-
-# Run specific test file
-pytest tests/test_organizer.py -v
-```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 👨‍💻 Author
-
-**Mahamed Yasser**
-- Python Developer & Video Editor
-- Qalyubia, Egypt
-- [GitHub Profile](https://github.com/mahamedwow1-afk)
-
----
-
-## 🙏 Acknowledgments
-
-- [PyQt6](https://www.qt.io/product/development-tools) - For the beautiful GUI framework
-- [Pillow](https://pillow.readthedocs.io/) - For image processing capabilities
-- [FFmpeg](https://ffmpeg.org/) - For multimedia processing
-
----
-
-<div align="center">
-
-Made with ❤️ by [Mahamed Yasser](https://github.com/mahamedwow1-afk)
-
-</div>
+Python 3.9+. No license file is included yet.
